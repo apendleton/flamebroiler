@@ -32,39 +32,41 @@ void free_rb_node(rb_tree_ptr tree, rb_node_ptr node) {
     free(node);
 }
 
-void rb_tree_insert(rb_tree_ptr tree, uchr key, void* value) {
-    rb_node_ptr node = (rb_node_ptr)(malloc(sizeof(rb_node_t)));
-    node->key = key;
-    node->value = value;
-
-    rb_tree_insert_node(tree, node);
-}
-
-void rb_tree_insert_node(rb_tree_ptr tree, rb_node_ptr node) {
-    rb_node_ptr x, y;
+rb_node_ptr rb_tree_insert(rb_tree_ptr tree, uchr key, void* value) {
+    rb_node_ptr x, y, z;
     y = tree->nil;
     x = tree->root;
     while (x != tree->nil) {
         y = x;
-        if (node->key < x->key) {
+        if (key < x->key) {
             x = x->left;
-        } else {
+        } else if (key > x->key) {
             x = x->right;
+        } else {
+            /* key == x->key, so we don't need to create a new node */
+            return x;
         }
     }
-    node->parent = y;
-    if (y == tree->nil) {
-        tree->root = node;
-    } else if (node->key < y->key) {
-        y->left = node;
-    } else {
-        y->right = node;
-    }
-    node->left = tree->nil;
-    node->right = tree->nil;
-    node->is_red = 1;
 
-    rb_tree_insert_fixup(tree, node);
+    /* we do need to create a new node */
+    z = (rb_node_ptr)(malloc(sizeof(rb_node_t)));
+    z->key = key;
+    z->value = value;
+    z->parent = y;
+    if (y == tree->nil) {
+        tree->root = z;
+    } else if (key < y->key) {
+        y->left = z;
+    } else {
+        y->right = z;
+    }
+    z->left = tree->nil;
+    z->right = tree->nil;
+    z->is_red = 1;
+
+    rb_tree_insert_fixup(tree, z);
+
+    return z;
 }
 
 void rb_tree_insert_fixup(rb_tree_ptr tree, rb_node_ptr node) {

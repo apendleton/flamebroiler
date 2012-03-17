@@ -36,11 +36,10 @@ int main() {
     rb_tree_ptr tree = create_rb_tree();
     
     n = L'a';
-    for (i = 0; i < 26; i += 2) {
+    for (i = 0; i < 20; i++) {
         rb_tree_insert(tree, n + i, NULL);
     }
-    n = L'b';
-    for (i = 0; i < 26; i += 2) {
+    for (i = 10; i < 26; i++) {
         rb_tree_insert(tree, n + i, NULL);
     }
 
