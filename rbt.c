@@ -12,21 +12,25 @@ rb_tree_ptr create_rb_tree() {
     return out;
 }
 
-void free_rb_tree(rb_tree_ptr tree) {
+void free_rb_tree(rb_tree_ptr tree, void(*free_value)(void *)) {
     if (tree->root != tree->nil) {
-        free_rb_node(tree, tree->root);
+        free_rb_node(tree, tree->root, free_value);
     }
     free(tree->nil);
     free(tree);
 }
 
-void free_rb_node(rb_tree_ptr tree, rb_node_ptr node) {
+void free_rb_node(rb_tree_ptr tree, rb_node_ptr node, void(*free_value)(void *)) {
+    if (free_value != NULL & node->value != NULL) {
+        free_value(node->value);
+    }
+
     if (node->left != tree->nil) {
-        free_rb_node(tree, node->left);
+        free_rb_node(tree, node->left, free_value);
     }
 
     if (node->right != tree->nil) {
-        free_rb_node(tree, node->right);
+        free_rb_node(tree, node->right, free_value);
     }
 
     free(node);
