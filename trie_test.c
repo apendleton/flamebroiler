@@ -9,6 +9,7 @@
 int main() {
     trie_ptr trie = create_trie();
     int i;
+    dyn_array *matches;
 
     uchr *fruit[10];
     fruit[0] = L"apple";
@@ -25,7 +26,11 @@ int main() {
         trie_insert(trie, fruit[i], fruit[i]);
     }
 
-    print_dot(trie);
+    matches = trie_suffixes(trie, L"p", 0, 0);
+
+    for (i = 0; i < matches->len; i++) {
+        wprintf(L"%ls\n", matches->arr[i]);
+    }
 
     free_trie(trie);
 

@@ -1,4 +1,4 @@
-from flamebroiler import Trie
+from trie import Trie
 
 fruits = ["apple", "peach", "pear", "mango", "lemon", "lime", "applesauce", "pineapple", "kiwi", "passionfruit"]
 
@@ -10,4 +10,4 @@ for fruit in fruits + [fruit.upper() for fruit in fruits]:
     f = trie.get(fruit, False)
     print fruit, "YES %s" % f if f else "NO"
 
-trie.print_dot()
+print trie.suffixes("pe")
