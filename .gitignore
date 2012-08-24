@@ -1,1 +1,7 @@
 _*
+*.gch
+*.dylib
+*.so
+*.dot
+*.png
+*_test
