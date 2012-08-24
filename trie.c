@@ -19,25 +19,29 @@ void free_trie(void *trie) {
     free(_trie);
 }
 
-/* probably should make this iterative */
-void trie_insert(trie_ptr trie, uchr *key, int key_length, uchr *value) {
+void trie_insert(trie_ptr trie, uchr *key, uchr *value) {
     uchr next_letter;
     rb_node_ptr next_node;
+    int key_length;
 
-    if (key_length == 0) {
-        /* we're at the leaf, so copy the value into the structure */
-        trie->value = (uchr*)(malloc((wcslen(value) + 1) * sizeof(uchr)));
-        wcscpy(trie->value, value);
-        return;
+    key_length = wcslen(key);
+
+    while (key_length > 0) {
+        /* we're not at the leaf, so proceed down the tree */
+        next_letter = *key;
+        next_node = rb_tree_insert(trie->children, next_letter, NULL);
+
+        if (next_node->value == NULL) {
+            next_node->value = (void *)(create_trie());
+        }
+
+        key += 1;
+        key_length -= 1;
+        trie = (trie_ptr)(next_node->value);
     }
 
-    /* we're not at the leaf, so proceed down the tree */
-    next_letter = *key;
-    next_node = rb_tree_insert(trie->children, next_letter, NULL);
-
-    if (next_node->value == NULL) {
-        next_node->value = (void *)(create_trie());
-    }
-
-    trie_insert((trie_ptr)(next_node->value), key + 1, key_length - 1, value);
+    /* we're at the leaf, so copy the value into the structure */
+    trie->value = (uchr*)(malloc((wcslen(value) + 1) * sizeof(uchr)));
+    wcscpy(trie->value, value);
+    return;
 }

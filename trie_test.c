@@ -22,7 +22,7 @@ int main() {
     fruit[8] = L"kiwi";
     fruit[9] = L"passionfruit";
     for (i = 0; i < 10; i++) {
-        trie_insert(trie, fruit[i], wcslen(fruit[i]), fruit[i]);
+        trie_insert(trie, fruit[i], fruit[i]);
     }
 
     print_dot(trie);
