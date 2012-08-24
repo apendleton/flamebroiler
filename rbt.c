@@ -154,3 +154,16 @@ void rb_tree_right_rotate(rb_tree_ptr tree, rb_node_ptr y) {
     x->right = y;
     y->parent = x;
 }
+
+rb_node_ptr rb_tree_search(rb_tree_ptr tree, uchr key) {
+    rb_node_ptr x;
+    x = tree->root;
+    while (x != tree->nil && x->key != key) {
+        if (key < x->key) {
+            x = x->left;
+        } else {
+            x = x->right;
+        }
+    }
+    return x;
+}

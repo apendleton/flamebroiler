@@ -45,3 +45,28 @@ void trie_insert(trie_ptr trie, uchr *key, uchr *value) {
     wcscpy(trie->value, value);
     return;
 }
+
+uchr* trie_search(trie_ptr trie, uchr *key) {
+    uchr next_letter;
+    rb_node_ptr next_node;
+    int key_length;
+
+    key_length = wcslen(key);
+
+    while (key_length > 0) {
+        /* we're not at the leaf, so proceed down the tree */
+        next_letter = *key;
+        next_node = rb_tree_search(trie->children, next_letter);
+
+        if (next_node == trie->children->nil || next_node->value == NULL) {
+            return NULL;
+        }
+
+        key += 1;
+        key_length -= 1;
+        trie = (trie_ptr)(next_node->value);
+    }
+
+    /* we're at the leaf, so return the value (null or otherwise) */
+    return trie->value;
+}

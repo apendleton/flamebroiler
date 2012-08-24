@@ -12,5 +12,6 @@ typedef struct trie {
 trie_ptr create_trie();
 void free_trie(void *trie);
 void trie_insert(trie_ptr trie, uchr *key, uchr *value);
+uchr* trie_search(trie_ptr trie, uchr *key);
 
 #endif

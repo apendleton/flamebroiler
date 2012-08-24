@@ -28,5 +28,6 @@ rb_node_ptr rb_tree_insert(rb_tree_ptr tree, uchr key, void* value);
 void rb_tree_insert_fixup(rb_tree_ptr tree, rb_node_ptr node);
 void rb_tree_left_rotate(rb_tree_ptr tree, rb_node_ptr x);
 void rb_tree_right_rotate(rb_tree_ptr tree, rb_node_ptr y);
+rb_node_ptr rb_tree_search(rb_tree_ptr tree, uchr key);
 
 #endif
