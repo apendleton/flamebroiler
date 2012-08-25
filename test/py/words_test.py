@@ -1,4 +1,4 @@
-from trie import Trie
+from flamebroiler import Trie
 
 trie = Trie()
 words = set((w.strip().lower() for w in open("/usr/share/dict/words")))

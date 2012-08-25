@@ -1,4 +1,4 @@
-from trie import Trie
+from flamebroiler import Trie
 
 fruits = ["apple", "peach", "pear", "mango", "lemon", "lime", "applesauce", "pineapple", "kiwi", "passionfruit"]
 

@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <wchar.h>
 
-#include "rbt.h"
-#include "trie.h"
-#include "trieprint.h"
+#include <rbt.h>
+#include <trie.h>
+#include <trieprint.h>
 
 int main() {
     trie_ptr trie = create_trie();
