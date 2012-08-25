@@ -9,9 +9,9 @@ trie_ffi.cdef("void* create_trie();")
 trie_ffi.cdef("void free_trie(void *trie);")
 trie_ffi.cdef("void trie_insert(void* trie, wchar_t *key, wchar_t *value);")
 trie_ffi.cdef("wchar_t* trie_search(void* trie, wchar_t *key);")
-trie_ffi.cdef("void free(void* addr);")
 trie_ffi.cdef("void print_dot(void* trie);")
 trie_ffi.cdef("dyn_array *trie_suffixes(void* trie, wchar_t *key, int strict, int max_matches);")
+trie_ffi.cdef("void dyn_array_free(dyn_array* darr);")
 libtrie = trie_ffi.dlopen(os.path.join(os.path.dirname(os.path.abspath(__file__)), "libtrie.%s" % libtype))
 libtrieprint = trie_ffi.dlopen(os.path.join(os.path.dirname(os.path.abspath(__file__)), "libtrieprint.%s" % libtype))
 
@@ -45,6 +45,6 @@ class Trie(DictMixin):
         ukey = unicode(key)
         matches_uta = libtrie.trie_suffixes(self._trie, ukey, int(strict), max_matches)
         out = dyn_array_as_list(matches_uta)
-        libtrie.free(matches_uta)
+        libtrie.dyn_array_free(matches_uta)
 
         return out

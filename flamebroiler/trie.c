@@ -98,6 +98,10 @@ dyn_array* dyn_array_add(dyn_array* darr, wchar_t* item) {
     }
     darr->arr[(darr->len)++] = item;
 }
+void dyn_array_free(dyn_array* darr) {
+    free(darr->arr);
+    free(darr);
+}
 
 
 bool trie_suffixes_visit(trie_ptr trie, int max_matches, dyn_array *out);
