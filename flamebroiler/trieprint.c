@@ -29,10 +29,16 @@ void print_rbt_node(rb_tree_ptr tree, rb_node_ptr node) {
 }
 
 void print_trie_node(trie_ptr trie) {
-    wprintf(L"  %lu [label=\"%ls\", color=\"green\"]\n", trie, trie->value == NULL ? L"[NONE]" : trie->value);
-    if (trie->children->root != trie->children->nil) {
-        print_rbt_node(trie->children, trie->children->root);
-        wprintf(L"  %lu -> %lu ;\n", trie, trie->children->root);
+    rb_tree_ptr children;
+    if (trie->compact) {
+        wprintf(L"  %lu [label=\"%ls : %ls\", color=\"blue\"];\n", trie, trie->child_data == NULL ? L"[NONE]" : trie->child_data, trie->value == NULL ? L"[NONE]" : trie->value);
+    } else {
+        children = (rb_tree_ptr)(trie->child_data);
+        wprintf(L"  %lu [label=\"%ls\", color=\"green\"];\n", trie, trie->value == NULL ? L"[NONE]" : trie->value);
+        if (children->root != children->nil) {
+            print_rbt_node(children, children->root);
+            wprintf(L"  %lu -> %lu ;\n", trie, children->root);
+        }
     }
 }
 

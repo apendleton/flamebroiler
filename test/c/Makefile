@@ -10,7 +10,8 @@ endif
 all: clean test
 
 clean:
-	rm -f *.dylib *.gch trie_test
+	rm -f *.dylib *.gch *_test
 
 test:
-	gcc -I../../flamebroiler -L../../flamebroiler -ltrie -ltrieprint -o trie_test trie_test.c
+	gcc -I../../flamebroiler -L../../flamebroiler -ltrie -ltrieprint -o trieprint_test trieprint_test.c
+	gcc -I../../flamebroiler -L../../flamebroiler -ltrie -ltrieprint -o suffix_test suffix_test.c

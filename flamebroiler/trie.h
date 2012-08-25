@@ -7,7 +7,8 @@
 typedef struct trie {
     wchar_t *value;
 
-    rb_tree_ptr children;
+    bool compact;
+    void* child_data;
 } trie_t, *trie_ptr;
 
 /* hacky dynamic array structure */
@@ -15,6 +16,11 @@ typedef struct {
     unsigned len, slots;
     wchar_t** arr;
 } dyn_array;
+
+typedef struct {
+    trie_ptr trie;
+    bool is_exact;
+} trie_search_result;
 
 trie_ptr create_trie();
 void free_trie(void *trie);

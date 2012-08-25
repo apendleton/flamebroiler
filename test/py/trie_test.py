@@ -6,8 +6,9 @@ trie = Trie()
 for fruit in fruits:
     trie[fruit] = fruit
 
-for fruit in fruits + [fruit.upper() for fruit in fruits]:
-    f = trie.get(fruit, False)
-    print fruit, "YES %s" % f if f else "NO"
+if __name__ == "__main__":
+    for fruit in fruits + [fruit.upper() for fruit in fruits]:
+        f = trie.get(fruit, False)
+        print fruit, "YES %s" % f if f else "NO"
 
-print trie.suffixes("pe")
+    print trie.suffixes("pe")
