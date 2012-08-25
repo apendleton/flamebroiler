@@ -36,7 +36,7 @@ void free_rb_node(rb_tree_ptr tree, rb_node_ptr node, void(*free_value)(void *))
     free(node);
 }
 
-rb_node_ptr rb_tree_insert(rb_tree_ptr tree, uchr key, void* value) {
+rb_node_ptr rb_tree_insert(rb_tree_ptr tree, wchar_t key, void* value) {
     rb_node_ptr x, y, z;
     y = tree->nil;
     x = tree->root;
@@ -155,7 +155,7 @@ void rb_tree_right_rotate(rb_tree_ptr tree, rb_node_ptr y) {
     y->parent = x;
 }
 
-rb_node_ptr rb_tree_search(rb_tree_ptr tree, uchr key) {
+rb_node_ptr rb_tree_search(rb_tree_ptr tree, wchar_t key) {
     rb_node_ptr x;
     x = tree->root;
     while (x != tree->nil && x->key != key) {

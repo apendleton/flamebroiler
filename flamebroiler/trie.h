@@ -5,7 +5,7 @@
 #define TRIE_H
 
 typedef struct trie {
-    uchr *value;
+    wchar_t *value;
 
     rb_tree_ptr children;
 } trie_t, *trie_ptr;
@@ -13,13 +13,13 @@ typedef struct trie {
 /* hacky dynamic array structure */
 typedef struct {
     unsigned len, slots;
-    uchr** arr;
+    wchar_t** arr;
 } dyn_array;
 
 trie_ptr create_trie();
 void free_trie(void *trie);
-void trie_insert(trie_ptr trie, uchr *key, uchr *value);
-uchr* trie_search(trie_ptr trie, uchr *key);
-dyn_array *trie_suffixes(trie_ptr trie, uchr *key, bool strict, int max_matches);
+void trie_insert(trie_ptr trie, wchar_t *key, wchar_t *value);
+wchar_t* trie_search(trie_ptr trie, wchar_t *key);
+dyn_array *trie_suffixes(trie_ptr trie, wchar_t *key, bool strict, int max_matches);
 
 #endif

@@ -20,8 +20,8 @@ void free_trie(void *trie) {
     free(_trie);
 }
 
-void trie_insert(trie_ptr trie, uchr *key, uchr *value) {
-    uchr next_letter;
+void trie_insert(trie_ptr trie, wchar_t *key, wchar_t *value) {
+    wchar_t next_letter;
     rb_node_ptr next_node;
     int key_length;
 
@@ -42,13 +42,13 @@ void trie_insert(trie_ptr trie, uchr *key, uchr *value) {
     }
 
     /* we're at the leaf, so copy the value into the structure */
-    trie->value = (uchr*)(malloc((wcslen(value) + 1) * sizeof(uchr)));
+    trie->value = (wchar_t*)(malloc((wcslen(value) + 1) * sizeof(wchar_t)));
     wcscpy(trie->value, value);
     return;
 }
 
-trie_ptr trie_node_search(trie_ptr trie, uchr *key) {
-    uchr next_letter;
+trie_ptr trie_node_search(trie_ptr trie, wchar_t *key) {
+    wchar_t next_letter;
     rb_node_ptr next_node;
     int key_length;
 
@@ -72,7 +72,7 @@ trie_ptr trie_node_search(trie_ptr trie, uchr *key) {
     return trie;
 }
 
-uchr* trie_search(trie_ptr trie, uchr* key) {
+wchar_t* trie_search(trie_ptr trie, wchar_t* key) {
     trie_ptr match;
 
     match = trie_node_search(trie, key);
@@ -86,15 +86,15 @@ uchr* trie_search(trie_ptr trie, uchr* key) {
 /* hacky dynamic array structure */
 dyn_array* dyn_array_new() {
     dyn_array* out = (dyn_array*)(malloc(sizeof(dyn_array)));
-    out->arr = (uchr**)(malloc(10 * sizeof(uchr*)));
+    out->arr = (wchar_t**)(malloc(10 * sizeof(wchar_t*)));
     out->slots = 10;
     out->len = 0;
     return out;
 }
-dyn_array* dyn_array_add(dyn_array* darr, uchr* item) {
+dyn_array* dyn_array_add(dyn_array* darr, wchar_t* item) {
     if (darr->len == darr->slots) {
         darr->slots += 10;
-        darr->arr = realloc(darr->arr, darr->slots * sizeof(uchr*));
+        darr->arr = realloc(darr->arr, darr->slots * sizeof(wchar_t*));
     }
     darr->arr[(darr->len)++] = item;
 }
@@ -131,7 +131,7 @@ bool trie_suffixes_visit(trie_ptr trie, int max_matches, dyn_array *out) {
 }
 
 /* creates a structure that must be freed by caller! */
-dyn_array *trie_suffixes(trie_ptr trie, uchr *key, bool strict, int max_matches) {
+dyn_array *trie_suffixes(trie_ptr trie, wchar_t *key, bool strict, int max_matches) {
     dyn_array *out;
     trie_ptr match;
 

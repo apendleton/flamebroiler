@@ -32,7 +32,7 @@ void print_dot(rb_tree_ptr tree) {
 
 int main() {
     int i;
-    uchr n;
+    wchar_t n;
     rb_tree_ptr tree = create_rb_tree();
     
     n = L'a';

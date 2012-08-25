@@ -11,7 +11,7 @@ int main() {
     int i;
     dyn_array *matches;
 
-    uchr *fruit[10];
+    wchar_t *fruit[10];
     fruit[0] = L"apple";
     fruit[1] = L"peach";
     fruit[2] = L"pear";
