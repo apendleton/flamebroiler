@@ -30,18 +30,20 @@ void expand_trie_node(trie_ptr trie, int length) {
     trie_ptr child_trie;
     rb_tree_ptr rbt;
     rb_node_ptr next_node;
+    int old_length;
 
     old_child_text = (wchar_t*)(trie->child_data);
     
     rbt = create_rb_tree();
     trie->child_data = (void*)(rbt);
 
-    if (wcslen(old_child_text) > 0) {
+    old_length = wcslen(old_child_text);
+    if (old_length > 0) {
         next_node = rb_tree_insert(rbt, old_child_text[0], NULL);
         child_trie = create_trie();
         next_node->value = (void*)(child_trie);
 
-        new_child_text = (wchar_t*)(malloc(length * sizeof(wchar_t)));
+        new_child_text = (wchar_t*)(malloc(old_length * sizeof(wchar_t)));
         wcscpy(new_child_text, old_child_text + 1);
         child_trie->child_data = (void*)(new_child_text);
         child_trie->value = trie->value;
