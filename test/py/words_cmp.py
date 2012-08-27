@@ -12,8 +12,11 @@ def cmp_words():
             if t_match == d_match:
                 print 'yes'
             else:
-                print t_match
-                print d_match
+                print "only in trie (of %s)" % len(t_match)
+                print t_match.difference(d_match)
+                
+                print "only in dict (of %s)" % len(d_match)
+                print d_match.difference(t_match)
 
 print resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
 words_t = Trie()
