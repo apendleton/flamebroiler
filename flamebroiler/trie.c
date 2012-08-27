@@ -32,25 +32,33 @@ void expand_trie_node(trie_ptr trie, int length) {
     rb_node_ptr next_node;
     int old_length;
 
-    old_child_text = (wchar_t*)(trie->child_data);
-    
-    rbt = create_rb_tree();
-    trie->child_data = (void*)(rbt);
+    if (trie->child_data == NULL) {
+        rbt = create_rb_tree();
+        trie->child_data = (void*)(rbt);
+    } else {
+        old_child_text = (wchar_t*)(trie->child_data);
+        
+        rbt = create_rb_tree();
+        trie->child_data = (void*)(rbt);
 
-    old_length = wcslen(old_child_text);
-    if (old_length > 0) {
-        next_node = rb_tree_insert(rbt, old_child_text[0], NULL);
-        child_trie = create_trie();
-        next_node->value = (void*)(child_trie);
+        old_length = wcslen(old_child_text);
+        if (old_length > 0) {
+            next_node = rb_tree_insert(rbt, old_child_text[0], NULL);
+            child_trie = create_trie();
+            next_node->value = (void*)(child_trie);
 
-        new_child_text = (wchar_t*)(malloc(old_length * sizeof(wchar_t)));
-        wcscpy(new_child_text, old_child_text + 1);
-        child_trie->child_data = (void*)(new_child_text);
-        child_trie->value = trie->value;
-        trie->value = NULL;
+            if (old_length > 1) {
+                new_child_text = (wchar_t*)(malloc(old_length * sizeof(wchar_t)));
+                wcscpy(new_child_text, old_child_text + 1);
+                child_trie->child_data = (void*)(new_child_text);
+            }
+
+            child_trie->value = trie->value;
+            trie->value = NULL;
+        }
+
+        free(old_child_text);
     }
-
-    free(old_child_text);
 
     trie->compact = false;
 }
@@ -66,8 +74,8 @@ void trie_insert(trie_ptr trie, wchar_t *key, wchar_t *value) {
     while (key_length > 0) {
         /* are we on a compact node? */
         if (trie->compact) {
-            if (trie->child_data == NULL) {
-                /* if we're on a compact trie node without key text, we can stop */
+            if (trie->child_data == NULL && trie->value == NULL) {
+                /* if we're on a compact trie node without key text and without value, we can stop */
                 child_text = (wchar_t*)(malloc((key_length + 1) * sizeof(wchar_t)));
                 wcscpy(child_text, key);
                 trie->child_data = (void*)(child_text);
@@ -113,8 +121,13 @@ trie_search_result trie_node_search(trie_ptr trie, wchar_t *key) {
         /* are we on a compact node? */
         if (trie->compact) {
             if (trie->child_data == NULL) {
-                /* we're not going to find it */
-                return result;
+                /* the end of the line -- is there a value here? */
+                if (trie->value != NULL) {
+                    /* found it */
+                    break;
+                } else {
+                    return result;
+                }
             } else {
                 /* if the key matches or begins the compact leaf, we're good */
                 if (wcsncmp(trie->child_data, key, key_length) == 0) {
