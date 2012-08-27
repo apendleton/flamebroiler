@@ -15,3 +15,7 @@ clean:
 build:
 	gcc -shared -fPIC -o libtrie.$(LIBTYPE) rbt.h trie.h rbt.c trie.c
 	gcc -shared -fPIC -o libtrieprint.$(LIBTYPE) rbt.h trie.h trieprint.h trieprint.c
+
+debug:
+	gcc -shared -fPIC -g -o libtrie.$(LIBTYPE) rbt.h trie.h rbt.c trie.c
+	gcc -shared -fPIC -g -o libtrieprint.$(LIBTYPE) rbt.h trie.h trieprint.h trieprint.c
