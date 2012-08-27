@@ -34,6 +34,7 @@ setup(
         'Programming Language :: Python',
         'Environment :: Web Environment',
     ],
+    install_requires=["cffi"],
 
     cmdclass={'install': FBInstall}
 )
