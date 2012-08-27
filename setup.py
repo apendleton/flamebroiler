@@ -1,13 +1,13 @@
 from setuptools import setup, find_packages, distutils
-from setuptools.command.install import install as BaseInstall
+from setuptools.command.build_py import build_py as BaseBuild
 import os, subprocess
 
-class FBInstall(BaseInstall):
+class FBBuild(BaseBuild):
     def run(self):
         lib_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flamebroiler')
         if subprocess.Popen("cd %s && make" % lib_path, shell=True).wait() != 0:
             raise distutils.errors.CompileError()
-        BaseInstall.run(self)
+        BaseBuild.run(self)
 
 f = open(os.path.join(os.path.dirname(__file__), 'README'))
 readme = f.read()
@@ -35,6 +35,8 @@ setup(
         'Environment :: Web Environment',
     ],
     install_requires=["cffi"],
+    include_package_data=True,
+    package_data={'': ['*.so','*.dylib']},
 
-    cmdclass={'install': FBInstall}
+    cmdclass={'build_py': FBBuild}
 )
