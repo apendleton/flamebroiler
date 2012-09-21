@@ -191,6 +191,7 @@ void dyn_array_free(dyn_array* darr) {
     free(darr);
 }
 
+/* this version returns a dynamic array that's already limited and populated on the C side */
 
 bool trie_suffixes_visit(trie_ptr trie, int max_matches, dyn_array *out);
 
@@ -255,4 +256,72 @@ dyn_array *trie_suffixes(trie_ptr trie, wchar_t *key, bool strict, int max_match
     }
     
     return out;
+}
+
+/* this version follows the iterator pattern and returns one element at a time */
+
+bool trie_suffixes_visit_it(trie_ptr trie, dyn_array *out);
+
+bool trie_suffixes_rb_node_visit_it(rb_node_ptr node, rb_node_ptr nil, dyn_array *out) {
+    int i;
+    bool cont;
+    if (node != nil) {
+        cont = trie_suffixes_rb_node_visit_it(node->left, nil, out);
+        if (!cont) return cont;
+
+        if (node->value != NULL) {
+            cont = trie_suffixes_visit_it(node->value, out);
+            if (!cont) return cont;
+        }
+
+        cont = trie_suffixes_rb_node_visit_it(node->right, nil, out);
+        if (!cont) return cont;
+    }
+    return true;
+}
+
+bool trie_suffixes_visit_it(trie_ptr trie, dyn_array *out) {
+    if (trie->value != NULL) {
+        dyn_array_add(out, trie->value);
+    }
+
+    if (!(trie->compact)) {
+        return trie_suffixes_rb_node_visit_it(((rb_tree_ptr)(trie->child_data))->root, ((rb_tree_ptr)(trie->child_data))->nil, out);
+    } else {
+        return true;
+    }
+}
+
+dyn_array *trie_suffixes_it(trie_ptr trie, wchar_t *key, bool strict) {
+    dyn_array *out;
+    trie_search_result match;
+
+    out = dyn_array_new();
+
+    /* first do a standard search to find the key */
+    match = trie_node_search(trie, key);
+    if (match.trie == NULL) {
+        return out;
+    }
+
+    if (match.trie->compact) {
+        if (strict && match.is_exact) {
+            return out;
+        } else {
+            trie_suffixes_visit_it(match.trie, out);
+        }
+    } else {
+        if (match.trie->value != NULL && !strict) {
+            trie_suffixes_visit_it(match.trie, out);
+        } else {
+            trie_suffixes_rb_node_visit_it(((rb_tree_ptr)(match.trie->child_data))->root, ((rb_tree_ptr)(match.trie->child_data))->nil, out);
+        }
+    }
+    
+    return out;
+}
+
+/* creates a structure that must be freed by caller! */
+trie_suffixes_state *trie_suffixes_it(trie_ptr trie, wchar_t *key, bool strict) {
+    return (trie_suffixes_state*)(malloc(sizeof(trie_suffixes_state)));
 }
