@@ -1,0 +1,1 @@
+A hybrid-trie string matching C extension, written partly as an experiment in CFFI-based Python extension writing, and partly to power the fast autocomplete on [Docket Wrench](http://docketwrench.sunlightfoundation.com/), contained in the [regs-ac](https://github.com/sunlightlabs/regs-ac) project.
