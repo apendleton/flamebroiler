@@ -9,7 +9,7 @@ class FBBuild(BaseBuild):
             raise distutils.errors.CompileError()
         BaseBuild.run(self)
 
-f = open(os.path.join(os.path.dirname(__file__), 'README'))
+f = open(os.path.join(os.path.dirname(__file__), 'README.md'))
 readme = f.read()
 f.close()
 
